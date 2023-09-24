@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 RUN pip install -U pip &&\
-  pip install --no-cache-dir numpy pandas pyspark jupyterlab
+  pip install --no-cache-dir numpy pandas pyspark jupyterlab delta-spark delta-sharing
 
 CMD jupyter-lab --allow-root --ip="0.0.0.0" --NotebookApp.token=''
 
