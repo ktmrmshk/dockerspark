@@ -9,6 +9,15 @@ $ docker build -t dockerspark .
 
 ## Usage
 
+### from public repo
+
+```
+$ docker run --rm -d -p 8888:8888 -p 4040:4040 -v ${PWD}:/data ghcr.io/ktmrmshk/dockerspark:latest
+```
+
+
+### from local repo
+
 ```
 $ docker run --rm -d -p 8888:8888 -p 4040:4040 -v ${PWD}:/data dockerspark
 ```
