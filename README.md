@@ -33,7 +33,7 @@ You can also access SparkUI at http://host:14040 once a spark session is created
 
 Using ssh tunnel from remote host:
 ```
-$ ssh host -L18888:localhost:18888 -L14040:locahost:14040
+$ ssh host -L18888:localhost:18888 -L14040:localhost:14040
 ```
 
 
