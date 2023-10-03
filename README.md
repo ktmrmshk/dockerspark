@@ -41,8 +41,12 @@ $ ssh host -L18888:localhost:18888 -L14040:localhost:14040
 
 ```
 from pyspark.sql import SparkSession
-spark = SparkSession.builder.remote("sc://localhost:15002").getOrCreate()
-spark.conf.set('spark.sql.repl.eagerEval.enabled', True)
+spark = (
+    SparkSession
+    .builder
+    .remote("sc://localhost")
+    .getOrCreate()
+)
 
 df = spark.createDataFrame([{'name': 'kita123'}])
 df.count()
