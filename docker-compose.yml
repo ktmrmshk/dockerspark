@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  spark-notebook:
+    image: "ghcr.io/ktmrmshk/dockerspark:latest"
+    ports:
+      - "18888:8888"
+      - "14040:4040"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - .:/data
+    command: | #/bin/bash 
+      jupyter-lab --allow-root --ip="0.0.0.0" --NotebookApp.token=''
+
+
+
