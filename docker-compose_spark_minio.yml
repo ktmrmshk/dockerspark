@@ -1,0 +1,52 @@
+---
+### run the command before docker compose up
+# $ echo "UID=$(id -u)" > .env
+# $ echo "GID=$(id -g)" >> .env
+# $ echo "DATADIR=/tmp/data" >> .env
+#
+version: "3.9"
+services:
+  minio:
+    image: "quay.io/minio/minio"
+    ports:
+      - "11190:9090"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    volumes:
+      - ./data:/data
+    #user: "${UID}:${GID}"
+    command: server /data --console-address ":9090"
+  spark-main:
+    image: "dockerspark"
+    ports:
+      - "11188:8888"
+      - "11140:4040"
+      - "11180:8080"
+    command: >
+      /bin/sh -c '
+      /opt/spark/sbin/start-master.sh &&
+      sleep 3 &&
+      /opt/spark/sbin/start-slave.sh spark://spark-main:7077  &&
+      jupyter-lab --allow-root --ip="0.0.0.0" --NotebookApp.token=""
+      '
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: "4g"
+
+  spark-worker1:
+    image: "dockerspark"
+    depends_on: 
+      - "spark-main"
+    command: >
+      sh -c '
+      /opt/spark/sbin/start-slave.sh spark://spark-main:7077 && /bin/bash
+      '
+    tty: true
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: "4g"
