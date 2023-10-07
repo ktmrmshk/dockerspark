@@ -75,3 +75,28 @@ spark.conf.set("spark.sql.repl.eagerEval.enabled", True)
 
 spark.sql('show tables')
 ```
+
+with minio:
+
+```
+from pyspark.sql import SparkSession
+spark = (
+SparkSession.builder
+    .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.3.1')
+    .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000")
+    .config("spark.hadoop.fs.s3a.access.key", "EL2zKWFMe8cF8tRBOTgn")
+    .config("spark.hadoop.fs.s3a.secret.key", "LWGtupdRpGgmkHBWeKX8HlHiJwgJWpn8pN7lUyJG")
+    .config("spark.hadoop.fs.s3a.path.style.access", "true")
+    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+    .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "false")
+    .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
+    .getOrCreate()
+)
+
+(
+    spark.sql('select 1 as no')
+    .write.format('csv')
+    .mode('overwrite')
+    .save('s3a://kita123/one.csv')
+)
+```
