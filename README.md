@@ -76,7 +76,16 @@ spark.conf.set("spark.sql.repl.eagerEval.enabled", True)
 spark.sql('show tables')
 ```
 
-with minio:
+## Spark with minio
+
+
+### Usage
+
+```
+docker compose -f docker-compose_spark_minio.yml up -d
+```
+
+### sample code
 
 ```
 from pyspark.sql import SparkSession
