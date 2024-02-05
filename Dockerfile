@@ -18,7 +18,7 @@ RUN curl -O 'https://dlcdn.apache.org/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.
 
 
 CMD /opt/spark/sbin/start-connect-server.sh \
-  --packages org.apache.spark:spark-connect_2.12:3.5.0,io.delta:delta-spark_2.12:3.0.0 \
+  --packages org.apache.spark:spark-connect_2.12:3.5.0,io.delta:delta-spark_2.12:3.0.0,io.delta:delta-sharing-spark_2.12:0.6.4 \
   --conf "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension" \
   --conf "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog" \
   --conf "spark.executor.memory=4g" \
