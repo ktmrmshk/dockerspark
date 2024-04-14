@@ -109,3 +109,70 @@ SparkSession.builder
     .save('s3a://kita123/one.csv')
 )
 ```
+
+
+## MySQL Connection
+
+### Download MySQL JDBC Driver from oracle
+
+[This site](https://dev.mysql.com/downloads/connector/j/) provides the JDBC driver.
+Select "JDBC" driver with "Platform Independent", and then you can download jar file like `mysql-connector-j-8.3.0.jar`
+
+
+### Start up Spark with this JDBC driver
+
+```bash
+$ spark-submit  --driver-class-path mysql-connector-j-8.3.0.jar --jars mysql-connector-j-8.3.0.jar example_spark_code.py
+```
+
+The `example_spark_code.py` is like follows:
+
+```python
+from pyspark.sql import SparkSession
+
+spark = (
+    SparkSession
+    .builder
+    .getOrCreate()
+)
+
+df = (
+    spark.read
+    .format('jdbc')
+    .option('url', 'jdbc:mysql://localhost:11306/kitadb')
+    .option('dbtable', '(select * from sys_config where value != "OFF") as ret')
+    #.option('dbtable', 'sys_config')
+    .option('user', 'foouser')
+    .option('password', 'xxxxxxxxxxxxxxxx')
+    .load()
+)
+
+df.show()
+```
+
+Alos, writing code:
+
+```python
+from pyspark.sql import SparkSession
+
+spark = (
+    SparkSession
+    .builder
+    .getOrCreate()
+)
+
+df = spark.createDataFrame([{'name': 'masa', 'age' : 12},{'name': 'kita', 'age': 23}])
+
+
+(
+    df.write
+    .format('jdbc')
+    .option('url', 'jdbc:mysql://localhost:11306/kitadb')
+    .option('dbtable', 'members')
+    .option('user', 'foouser')
+    .option('password', 'xxxxxxxxx')
+    .mode('append')
+    .save()
+)
+
+```
